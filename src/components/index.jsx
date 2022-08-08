@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import clsx from 'clsx'
 import Flags from 'country-flag-icons/react/3x2'
 import { styled } from '@mui/material'
 import TextField from '@mui/material/TextField'
@@ -687,10 +686,6 @@ class MaterialUiPhoneNumber extends React.Component {
                     id="country-menu"
                     open={Boolean(anchorEl)}
                     onClose={() => this.setState({ anchorEl: null })}
-                    // classes={{
-                    //   root: clsx(classes.nativeRoot, 'native'),
-                    //   select: classes.nativeSelect,
-                    // }}
                     onChange={(e) => this.handleFlagItemClick(e.target.value)}
                     IconComponent={Boolean(FlagComponent) && FlagComponent}
                     disableUnderline
