@@ -93,7 +93,7 @@ class MaterialUiPhoneNumber extends React.Component {
       countryGuess = 0
     }
 
-    const countryGuessIndex = this.allCountries.findIndex((item) => item === countryGuess)
+    const countryGuessIndex = countryData.allCountries.findIndex((item) => item === countryGuess)
     const dialCode =
       inputNumber.length < 2 && countryGuess && !inputNumber.replace(/\D/g, '').startsWith(countryGuess.dialCode)
         ? countryGuess.dialCode
