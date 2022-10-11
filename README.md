@@ -2,13 +2,14 @@
 
 Highly customizable phone input component with auto formatting. Based on [mui-phone-number](https://github.com/alexplumb/material-ui-phone-number) which is not maintained anymore; and which was in turn based on the wonderful [react-phone-input-2](https://github.com/bl00mber/react-phone-input-2) package.
 
-This library is actively maintained and currently being rewritten into functional style (previous one was class based).
+This library is actively maintained and any contributions are welcome.
 
 It looks like this, but in Material Design:
 
 ![alt tag](https://media.giphy.com/media/l378A8qFNzgiuPUre/giphy.gif)
 
 Uses @material-ui/core/TextField for rendering the phone input
+See [Codesandbox example](https://codesandbox.io/s/material-ui-phone-number-2-controlled-8rckb8)
 
 ## Installation
 
