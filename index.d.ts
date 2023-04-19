@@ -18,7 +18,7 @@ export type MuiPhoneNumberProps = TextFieldProps & {
   ) => void;
   onlyCountries?: string[];
   preferredCountries?: string[];
-  regions?: [string] | string;
+  regions?: string[] | string;
   masks?: { [countryIso2: string]: string }
 };
 
