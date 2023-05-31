@@ -4,31 +4,17 @@ const common = require('./webpack.config.common');
 
 module.exports = merge(common, {
   mode: 'production',
-  externals: [
-    {
-      react: {
-        root: 'React',
-        commonjs2: 'react',
-        commonjs: 'react',
-        amd: 'react',
-      },
-      'react-dom': {
-        root: 'ReactDOM',
-        commonjs2: 'react-dom',
-        commonjs: 'react-dom',
-        amd: 'react-dom',
-      },
-      lodash: {
-        commonjs: 'lodash',
-        commonjs2: 'lodash',
-        amd: 'lodash',
-        root: '_',
-      },
-    },
-    '@mui/material',
-    /@mui\/material\/*./,
-    'clsx',
-  ],
+  externals: {
+    'country-flag-icons/react/3x2': 'country-flag-icons/react/3x2',
+    '@mui/material': '@mui/material',
+    'react': 'react',
+    'lodash.debounce': 'lodash.debounce',
+    'lodash.memoize': 'lodash.memoize',
+    'react-dom': 'react-dom',
+    'prop-types': 'prop-types',
+    '@emotion/react': '@emotion/react',
+    '@emotion/styled': '@emotion/styled',
+  },
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import MenuItem from '@mui/material/MenuItem';
+import { MenuItem } from '@mui/material';
 import Flags from 'country-flag-icons/react/3x2'
 
 class Item extends React.PureComponent {
