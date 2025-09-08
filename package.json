@@ -58,12 +58,13 @@
     "webpack-merge": "^5.8.0"
   },
   "dependencies": {
-    "country-flag-icons": "^1.4.10",
-    "lodash.debounce": "^4.0.8",
-    "lodash.memoize": "^4.1.2",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
     "@mui/material": "^5.8.0",
+    "country-flag-icons": "^1.4.10",
+    "libphonenumber-js": "^1.12.15",
+    "lodash.debounce": "^4.0.8",
+    "lodash.memoize": "^4.1.2",
     "prop-types": "^15.8.1",
     "react": "^17.0.2 || ^18.0.0",
     "react-dom": "^17.0.2 || ^18.0.0"
