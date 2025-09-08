@@ -6,6 +6,7 @@ import countryData from '../country_data'
 import Item from './Item'
 import debounce from 'lodash.debounce'
 import memoize from 'lodash.memoize'
+import { parsePhoneNumberFromString } from 'libphonenumber-js';
 
 const IconButtonStyled = styled(IconButton)({
   width: 'min-content',
@@ -102,10 +103,7 @@ class MaterialUiPhoneNumber extends React.Component {
     const formattedNumber =
       inputNumber === '' && countryGuess === 0
         ? ''
-        : this.formatNumber(
-            (props.disableCountryCode ? '' : dialCode) + inputNumber.replace(/\D/g, ''),
-            this.getInputMask(countryGuess) || (countryGuess.name ? countryGuess.format : undefined),
-          )
+        : this.formatNumber((props.disableCountryCode ? '' : dialCode) + inputNumber.replace(/\D/g, ''))
 
     this.state = {
       formattedNumber,
@@ -217,62 +215,14 @@ class MaterialUiPhoneNumber extends React.Component {
     container.scrollTop = country.offsetTop
   }
 
-  formatNumber = (text, patternArg) => {
-    const { disableCountryCode, enableLongNumbers, autoFormat } = this.props
+  formatNumber = (text) => {
+    const parsedValue = parsePhoneNumberFromString('+' + text, this.state?.selectedCountry?.iso2?.toUpperCase());
 
-    let pattern
-    if (disableCountryCode && patternArg) {
-      pattern = patternArg.split(' ')
-      pattern.shift()
-      pattern = pattern.join(' ')
-    } else {
-      pattern = patternArg
+    if (!parsedValue?.isValid() || !parsedValue?.isPossible()) {
+      return '+' + text;
     }
 
-    if (!text || text.length === 0) {
-      return disableCountryCode ? '' : '+'
-    }
-
-    // for all strings with length less than 3, just return it (1, 2 etc.)
-    // also return the same text if the selected country has no fixed format
-    if ((text && text.length < 2) || !pattern || !autoFormat) {
-      return disableCountryCode ? text : `+${text}`
-    }
-
-    const formattedObject = pattern.split("").reduce(
-      (acc, character) => {
-        if (acc.remainingText.length === 0) {
-          return acc
-        }
-
-        if (character !== '.') {
-          return {
-            formattedText: acc.formattedText + character,
-            remainingText: acc.remainingText,
-          }
-        }
-        const [ head, ...tail ] = acc.remainingText
-        return {
-          formattedText: acc.formattedText + head,
-          remainingText: tail,
-        }
-      },
-      {
-        formattedText: '',
-        remainingText: text.split(''),
-      },
-    )
-
-    let formattedNumber
-    if (enableLongNumbers) {
-      formattedNumber = formattedObject.formattedText + formattedObject.remainingText.join('')
-    } else {
-      formattedNumber = formattedObject.formattedText
-    }
-
-    // Always close brackets
-    if (formattedNumber.includes('(') && !formattedNumber.includes(')')) formattedNumber += ')'
-    return formattedNumber
+    return parsedValue.formatInternational();
   }
 
   // Put the cursor to the end of the input (usually after a focus event)
@@ -347,7 +297,7 @@ class MaterialUiPhoneNumber extends React.Component {
         freezeSelection = false
       }
       // let us remove all non numerals from the input
-      formattedNumber = this.formatNumber(inputNumber, this.getInputMask(newSelectedCountry))
+      formattedNumber = this.formatNumber(inputNumber)
     }
 
     let caretPosition = e.target.selectionStart
@@ -379,14 +329,6 @@ class MaterialUiPhoneNumber extends React.Component {
         }
       },
     )
-  }
-
-  getInputMask = (country) => {
-    const mask = this.props.masks[country.iso2]
-
-    if (mask) return mask
-
-    return country.format
   }
 
   handleRefInput = (ref) => {
@@ -433,7 +375,7 @@ class MaterialUiPhoneNumber extends React.Component {
         ? unformattedNumber.replace(currentSelectedCountry.dialCode, nextSelectedCountry.dialCode)
         : nextSelectedCountry.dialCode
 
-    const newFormattedNumber = this.formatNumber(newNumber.replace(/\D/g, ''), this.getInputMask(nextSelectedCountry))
+    const newFormattedNumber = this.formatNumber(newNumber.replace(/\D/g, ''))
 
     this.setState(
       {
@@ -608,14 +550,11 @@ class MaterialUiPhoneNumber extends React.Component {
       countryGuess = onlyCountries.find((item) => item.iso2 === defaultCountry)
       const dialCode =
         countryGuess && !inputNumber.replace(/\D/g, '').startsWith(countryGuess.dialCode) ? countryGuess.dialCode : ''
-      formattedNumber = this.formatNumber(
-        (disableCountryCode ? '' : dialCode) + inputNumber.replace(/\D/g, ''),
-        countryGuess ? this.getInputMask(countryGuess) : undefined,
-      )
+      formattedNumber = this.formatNumber((disableCountryCode ? '' : dialCode) + inputNumber.replace(/\D/g, ''),)
     } else {
       inputNumber = inputNumber.replace(/\D/g, '')
       countryGuess = this.guessSelectedCountry(inputNumber.substring(0, 6), onlyCountries, defaultCountry)
-      formattedNumber = this.formatNumber(inputNumber, this.getInputMask(countryGuess))
+      formattedNumber = this.formatNumber(inputNumber)
     }
 
     this.setState({ selectedCountry: countryGuess, formattedNumber })
